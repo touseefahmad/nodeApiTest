@@ -1,4 +1,5 @@
 var express = require('express');
+const _ =require('lodash');
 var bodyParser = require('body-parser');
 var {ObjectID} = require('mongodb');
 
@@ -71,6 +72,41 @@ app.delete('/todo/:id',(req,res)=>{
     console.log("inside catech ");
     return res.status(404).send({});
   });
+});
+
+app.patch('/todos/:id',(req,res)=>{
+  console.log(req.params);
+  console.log(req.body);
+  var id = req.params.id;
+  var body = _.pick(req.body, ['text','completed']);
+  if(!ObjectID.isValid(id)){
+    console.log('id not valid');
+    return res.status(404).send({});
+  }
+
+  if(_.isBoolean(body.completed) && body.completed){
+    body.completedAt = new Date().getTime();
+  }else{
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  Todo.findByIdAndUpdate(id,{
+    $set: body
+  },{ new : true}).then((todo)=>{
+    if(!todo){
+      console.log('no todo found');
+      return res.status(400).send({});
+    }
+    res.send({todo});
+  },(e)=>{
+    console.log('error',e);
+    return res.status(400).send({});
+  }).catch((e)=>{
+    console.log('error',e);
+    return res.status(400).send({});
+  });
+
 });
 app.listen(port,()=>{
   console.log('started on port:',port);
