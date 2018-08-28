@@ -44,7 +44,34 @@ app.get('/todos/:id',(req,res)=>{
     res.status(400).send();
   });
   //res.send(req.params);
-})
+});
+//this will remove all documents
+// Todo.remove({}).then((result)=>{
+//   console.log(result);
+// },(e)=>{
+//   console.log("error",e);
+// });
+// Todo.findOneAndRemove({_id:""}).then((todo)=>{
+//   console.log("deleted doc:",todo);
+// },(e){
+// console.log("error:",e);
+// });
+app.delete('/todo/:id',(req,res)=>{
+  console.log(req.params);
+  var id =  req.params.id;
+  if(!ObjectID.isValid(id)){
+    return res.status(404).send({});
+  }
+  Todo.findByIdAndRemove(id).then((doc)=>{
+    res.send({doc});
+  },(e)=>{
+    console.log("error of promise");
+    return res.status(404).send({});
+  }).catch((e)=>{
+    console.log("inside catech ");
+    return res.status(404).send({});
+  });
+});
 app.listen(port,()=>{
   console.log('started on port:',port);
 });
