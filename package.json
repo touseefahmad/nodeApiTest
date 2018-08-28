@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start":"node Server/serve.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines":{
+    "node":"8.7.0"
   },
   "author": "ta",
   "license": "ISC",
