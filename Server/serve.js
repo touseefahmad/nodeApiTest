@@ -118,7 +118,22 @@ app.patch('/todos/:id',(req,res)=>{
     console.log('error',e);
     return res.status(400).send({});
   });
+});
+//post users
+app.post('/users',(req,res)=>{
+  var body =_.pick(req.body,['email','password']);
+  var user =  new User(body);
 
+  user.save().then((user)=>{
+    if(!user){
+      return res.status(400).send({});
+    }
+    res.send({user});
+  },(e)=>{
+    return res.status(400).send(e);
+  }).catch((e)=>{
+    return res.status(400).send(e);
+  });
 });
 app.listen(port,()=>{
   console.log('started on port:',port);
