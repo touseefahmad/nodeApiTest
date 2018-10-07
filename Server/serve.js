@@ -11,7 +11,7 @@ if(env === 'development'){
 
 
 var express = require('express');
-const _ =require('lodash');
+const _ = require('lodash');
 var bodyParser = require('body-parser');
 var {ObjectID} = require('mongodb');
 
@@ -125,6 +125,9 @@ app.post('/users', (req, res) => {
   var user = new User(body);
 
   user.save().then(() => {
+    //got a value returned from a promise so
+    // promise chaining is handled by then and passing the token
+    //to next
     return user.generateAuthToken();
   }).then((token) => {
     res.header('x-auth', token).send(user);

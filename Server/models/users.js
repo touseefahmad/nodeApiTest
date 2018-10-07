@@ -32,8 +32,10 @@ var UserSchema =new mongoose.Schema({
     }]
 
 });
-
+//UserSchema.methods are instance methods
 UserSchema.methods.toJSON = function(){
+  // this instance method is called when response is
+  //converted into json object
   var user = this;
   var userObject =user.toObject();
 
@@ -55,5 +57,6 @@ UserSchema.methods.generateAuthToken = function(){
 };
 // user model
 var User = mongoose.model('User',UserSchema);
-
-module.exports = {User};
+module.exports = {
+  User
+};
