@@ -123,6 +123,7 @@ app.patch('/todos/:id',(req,res)=>{
 //post users
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
+  console.log(body);
   var user = new User(body);
 
   user.save().then(() => {
@@ -135,6 +136,20 @@ app.post('/users', (req, res) => {
   }).catch((e) => {
     res.status(400).send(e);
   })
+});
+app.post('/users/login',(req,res)=>{
+var body =_.pick(req.body,['email','password']);
+console.log(body);
+User.findByCredentials(body.email,body.password).then((user)=>{
+  console.log('inside findByCredentials');
+//  res.send(user);
+return user.generateAuthToken().then((token)=>{
+  res.header('x-autth',token).send(user);
+});
+}).catch((e)=>{
+  res.status(400).send(e);
+});
+
 });
 
 app.get('/users/me',authenticate,(req,res)=>{
